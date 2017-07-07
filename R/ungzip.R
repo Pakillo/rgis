@@ -15,7 +15,8 @@
 #' gisdata <- brick(ungzip("~/GISdata/climate.nc.gz"))
 #' }
 ungzip <- function(filepath){
-  R.utils::decompressFile(filepath, ext="gz", FUN=gzfile,
+  R.utils::decompressFile(filepath, ext = "gz", FUN = gzfile,
+                          destname = gsub(".gz", "", filepath, ignore.case = TRUE),
                           remove = FALSE, temporary = TRUE,
                           skip = FALSE, overwrite = TRUE)
 }

@@ -2,8 +2,8 @@
 % Please edit documentation in R/rgis-package.R
 \docType{package}
 \name{rgis-package}
-\alias{rgis}
 \alias{rgis-package}
+\alias{rgis}
 \title{rgis package}
 \description{
 Functions to perform GIS operations in R.
@@ -12,4 +12,3 @@ Functions to perform GIS operations in R.
 Francisco Rodriguez-Sanchez
 }
 \keyword{package}
-

@@ -21,4 +21,3 @@ library(raster)
 gisdata <- brick(ungzip("~/GISdata/climate.nc.gz"))
 }
 }
-
