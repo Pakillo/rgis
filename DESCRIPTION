@@ -14,7 +14,7 @@ BugReports: https://github.com/Pakillo/rgis/issues
 License: GPL-3
 LazyData: TRUE
 Encoding: UTF-8
-RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
 Imports:
   R.utils
-
