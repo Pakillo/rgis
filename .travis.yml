@@ -5,8 +5,8 @@ sudo: required
 
 dist: trusty
 
-r_packages:
-  - rgdal
+apt_packages:
+  - gdal-bin
 
 
 
