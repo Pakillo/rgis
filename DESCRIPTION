@@ -1,14 +1,20 @@
 Package: rgis
 Type: Package
-Title: Functions to perform GIS operations in R
+Title: Some utilities to perform GIS operations in R
 Version: 0.1.2
-Author: F. Rodriguez-Sanchez
-Maintainer: F. Rodriguez-Sanchez <f.rodriguez.sanc@gmail.com>
+Authors@R: 
+    person(given = "Francisco",
+           family = "Rodriguez-Sanchez",
+           role = c("aut", "cre"),
+           email = "f.rodriguez.sanc@gmail.com",
+           comment = c(ORCID = "0000-0002-7981-1599"))
 Description: Functions to perform GIS operations in R.
+URL: https://github.com/Pakillo/rgis
+BugReports: https://github.com/Pakillo/rgis/issues
 License: GPL-3
 LazyData: TRUE
+Encoding: UTF-8
 RoxygenNote: 6.0.1
 Imports:
   R.utils
-URL: https://github.com/Pakillo/rgis
-BugReports: https://github.com/Pakillo/rgis/issues
+
