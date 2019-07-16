@@ -1,7 +1,7 @@
 Package: rgis
 Type: Package
 Title: Some utilities to perform GIS operations in R
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: 
     person(given = "Francisco",
            family = "Rodriguez-Sanchez",
@@ -17,4 +17,9 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Imports:
-  R.utils
+    R.utils,
+    velox,
+    future,
+    future.apply,
+    dplyr
+
