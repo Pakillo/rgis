@@ -22,4 +22,5 @@ Imports:
     future,
     future.apply,
     dplyr
-
+Suggests: 
+    testthat
