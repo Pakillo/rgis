@@ -13,5 +13,9 @@ apt_packages:
   - libgdal-dev
   - libudunits2-dev
 
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+
 
 
