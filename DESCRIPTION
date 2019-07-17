@@ -1,7 +1,7 @@
 Package: rgis
 Type: Package
 Title: Some utilities to perform GIS operations in R
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person(given = "Francisco",
            family = "Rodriguez-Sanchez",
@@ -21,6 +21,7 @@ Imports:
     velox,
     future,
     future.apply,
-    dplyr
+    dplyr,
+    raster
 Suggests: 
     testthat

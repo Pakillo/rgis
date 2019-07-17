@@ -61,6 +61,9 @@ extract_velox <- function(ras = NULL, spdf = NULL,
 
   ras.vx <- velox::velox(ras)
 
+  ## Ensure CRS of spdf and ras match
+  stopifnot(raster::compareCRS(st_crs(spdf)$proj4string, ras.vx$crs))
+
   # crop to extent of sf/sp object
   ras.vx$crop(spdf)
 
