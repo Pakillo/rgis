@@ -35,7 +35,7 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
     future::plan(future::multiprocess)
   }
 
-  out.list <- future.apply::future_lapply(ras, extract_velox,
+  out.list <- future.apply::future_lapply(as.list(ras), rgis:::extract_velox,
                                           spdf = sf,
                                           fun = funct, small = small.algo,
                                           varnames = col.names)
