@@ -70,7 +70,7 @@ extract_velox <- function(ras = NULL, spdf = NULL,
 
   # extract
   vals <- ras.vx$extract(spdf, df = TRUE, ...)  #fun = funct, small = small.algo)
-  vals <- vals[, -1]
+  vals <- as.data.frame(vals[, -1])
 
 
 
