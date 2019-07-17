@@ -36,7 +36,7 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
   }
 
   out.list <- future.apply::future_lapply(list(ras),
-                                          rgis:::extract_velox,
+                                          extract_velox,
                                           spdf = sf,
                                           fun = funct, small = small.algo,
                                           varnames = col.names)
@@ -63,7 +63,7 @@ extract_velox <- function(ras = NULL, spdf = NULL,
   ras.vx <- velox::velox(ras)
 
   ## Ensure CRS of spdf and ras match
-  stopifnot(raster::compareCRS(st_crs(spdf)$proj4string, ras.vx$crs))
+  stopifnot(raster::compareCRS(sf::st_crs(spdf)$proj4string, ras.vx$crs))
 
   # crop to extent of sf/sp object
   ras.vx$crop(spdf)

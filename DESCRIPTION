@@ -22,6 +22,7 @@ Imports:
     future,
     future.apply,
     dplyr,
-    raster
+    raster,
+    sf
 Suggests: 
-    testthat
+    testthat (>= 2.1.0)
