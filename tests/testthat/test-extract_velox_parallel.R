@@ -25,6 +25,14 @@ rgis.output.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras,
 
 ###
 
+## Providing named list of rasters
+ras.list <- list(r1 = r1, r2 = r2)
+rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+
+###
+
+
+
 
 test_that("output is a sf dataframe of appropriate dimensions", {
   expect_is(rgis.output.noparallel, "sf")
@@ -38,6 +46,18 @@ test_that("results from parallel and sequential runs match", {
 
 
 test_that("results from exact_velox_parallel match those from raster::extract", {
-  expect_equal(raster.output, sf::st_drop_geometry(rgis.output.noparallel))
+  # compared to raster::extract, rgis::extract_velox_parallel appends the raster name
+  # to layer names. So, renaming the layers here to make them equal to raster::extract output
+  # Here I just want to check values of extraction are consistent
+  rgis.output.renamed <- sf::st_drop_geometry(rgis.output.noparallel)
+  names(rgis.output.renamed) <- c("layer.1", "layer.2")
+  expect_equal(raster.output, rgis.output.renamed)
 })
 
+
+test_that("names of extracted columns are correct", {
+  expect_equal(names(sf::st_drop_geometry(rgis.output.noparallel)),
+               c("ras_layer.1", "ras_layer.2"))
+  expect_equal(names(sf::st_drop_geometry(rgis.out)),
+               c("r1_layer", "r2_layer"))
+})

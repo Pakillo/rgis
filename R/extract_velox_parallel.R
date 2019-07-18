@@ -35,14 +35,62 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
     future::plan(future::multiprocess)
   }
 
-  out.list <- future.apply::future_lapply(list(ras),
+  # First argument to future_lapply must be a list
+  if (!inherits(ras, "list")) {
+    ras.list <- list(ras)
+  } else {
+    ras.list <- ras
+  }
+
+  # Run extraction
+  out.list <- future.apply::future_lapply(ras.list,
                                           extract_velox,
                                           spdf = sf,
                                           fun = funct, small = small.algo,
                                           varnames = col.names)
-  #plan(sequential)
 
-  out.df <- dplyr::bind_cols(out.list)
+
+
+  ## Name extracted columns ##
+
+  if (is.null(col.names)) {
+    # if ras = Raster* object, use the object name
+    if (inherits(ras, c("RasterLayer", "RasterStack", "RasterBrick"))) {
+      ras.names <- as.character(match.call()$ras)
+    } else {
+      # if ras is a *named* list, use names of list elements
+      if (is.list(ras)) {
+        if (!is.null(names(ras))) {
+          ras.names <- names(ras)
+        } else {
+          # if ras is an *unnamed* list, assume they are paths to files,
+          # and use file basename (with extension)
+          ras.names <- unlist(lapply(ras, basename))
+        }
+      }
+
+    }
+  }
+
+
+  names(out.list) <- ras.names
+
+  for (i in seq_along(out.list)) {
+    names(out.list[[i]]) <- paste(names(out.list)[[i]], names(out.list[[i]]), sep = "_")
+  }
+
+
+  out.df <- dplyr::bind_cols(out.list)  # list to dataframe
+
+  # if providing col.names, use those
+  if (!is.null(col.names)) {
+    if (length(col.names) != ncol(out.df)) {
+      stop("length of col.names does not match number of extracted columns.")
+    }
+    names(out.df) <- col.names
+  }
+
+  # Merge extracted columns with sf dataframe
   sf.final <- dplyr::bind_cols(sf, out.df)
   sf.final
 
@@ -58,7 +106,6 @@ extract_velox <- function(ras = NULL, spdf = NULL,
                           varnames = NULL) {
 
   # ras = Raster* object (in memory or path to file)
-  # df = sf object
 
   ras.vx <- velox::velox(ras)
 
@@ -74,28 +121,13 @@ extract_velox <- function(ras = NULL, spdf = NULL,
   vals <- as.data.frame(vals[, -1])
 
 
-
   ## Name extracted columns ##
 
-  # if providing varnames, use those
-  if (!is.null(varnames)) {
-    if (length(varnames) != (ncol(vals))) {
-      stop("length of col.names does not match number of raster layers.")
-    } else {
-      names(vals) <- varnames
-    }
-
-    ## Otherwise use Raster* layer names (if available)
-    ## otherwise use filename followed by numbers
-  } else {
-    if (!is.null(names(ras))){
-      names(vals) <- names(ras)
-    } else {
-      warning("Using raster file names for naming columns... Be careful with potential name clashes.")
-      names(vals) <- paste(basename(ras), seq_len(ncol(vals)), sep = ".")
-    }
-
+  if (is.null(varnames)) {
+    # velox does not seem to provide layer names, so using raster instead
+    names(vals) <- names(raster::stack(ras, quick = TRUE))
   }
+
 
   return(vals)
 
