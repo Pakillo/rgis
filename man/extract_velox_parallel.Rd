@@ -10,13 +10,13 @@ extract_velox_parallel(sf = NULL, ras = NULL, funct = "mean.na",
 \arguments{
 \item{sf}{\href{https://r-spatial.github.io/sf/index.html}{sf} data frame containing polygon data.}
 
-\item{ras}{A (list of) Raster* objects, or a character vector of paths to Raster files. Thus, raster files can be stored on disk, without having to load them on memory first.}
+\item{ras}{A Raster* object (RasterLayer, RasterStack, or RasterBrick), a \emph{named} list of Raster objects, or a list of paths to Raster files on disk (e.g. as obtained trough \code{list.files}). Thus, raster files can be stored on disk, without having to load them on memory first.}
 
-\item{funct}{The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple avergae excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See \code{\link[velox:VeloxRaster_extract]{velox::VeloxRaster_extract()}}.}
+\item{funct}{The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple average, excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See \code{\link[velox:VeloxRaster_extract]{velox::VeloxRaster_extract()}}.}
 
 \item{small.algo}{Logical. Use 'small' algorithm to detect overlap between polygons and raster cells? See \code{\link[velox:VeloxRaster_extract]{velox::VeloxRaster_extract()}}. Default is FALSE.}
 
-\item{col.names}{Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* object layer names, or the file name followed by consecutive numbers.}
+\item{col.names}{Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* object layer names or, if \code{ras} is a list of paths, the file name followed by layer names.}
 
 \item{parallel}{Logical. Run function in parallel (using \code{future.apply})? Default is TRUE.}
 }
@@ -25,4 +25,34 @@ A sf data frame with the same number of rows as the original and new columns con
 }
 \description{
 Extract values from raster layers for a given set of polygons. Parallelised and using \code{velox} package for faster extraction than using \code{\link[raster:extract]{raster::extract()}}.
+}
+\examples{
+library(raster)
+library(rgis)
+
+## Example taken from raster::extract
+
+# Create polygons
+poly1 <- rbind(c(-180,-20), c(-160,5), c(-60, 0), c(-160,-60), c(-180,-20))
+poly2 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
+polys.sf <- sf::st_as_sf(spPolygons(poly1, poly2))
+sf::st_crs(polys.sf) <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+# Create rasters
+r1 <- raster(ncol = 36, nrow = 18, vals = 1:(18*36))
+r2 <- raster(ncol = 36, nrow = 18, vals = (1:(18*36))*2)
+ras <- stack(r1, r2)
+
+rgis.output.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+
+rgis.output.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+
+# Compare with raster::extract
+#' raster.output <- raster::extract(ras, polys, fun = mean, df = TRUE)
+
+
+
+## Providing named list of rasters
+ras.list <- list(r1 = r1, r2 = r2)
+rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
 }
