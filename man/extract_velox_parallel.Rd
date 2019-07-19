@@ -10,18 +10,18 @@ extract_velox_parallel(sf = NULL, ras = NULL, funct = "mean.na",
 \arguments{
 \item{sf}{\href{https://r-spatial.github.io/sf/index.html}{sf} data frame containing polygon data.}
 
-\item{ras}{A Raster* object (RasterLayer, RasterStack, or RasterBrick), a \emph{named} list of Raster objects, or a list of paths to Raster files on disk (e.g. as obtained trough \code{list.files}). Thus, raster files can be stored on disk, without having to load them on memory first.}
+\item{ras}{A Raster* object (RasterLayer, RasterStack, or RasterBrick), a \emph{named} list of Raster objects, or a character vector or list of paths to Raster files on disk (e.g. as obtained through \code{list.files}). Thus, raster files can be stored on disk, without having to load them on memory first.}
 
 \item{funct}{The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple average, excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See \code{\link[velox:VeloxRaster_extract]{velox::VeloxRaster_extract()}}.}
 
 \item{small.algo}{Logical. Use 'small' algorithm to detect overlap between polygons and raster cells? See \code{\link[velox:VeloxRaster_extract]{velox::VeloxRaster_extract()}}. Default is FALSE.}
 
-\item{col.names}{Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* object layer names or, if \code{ras} is a list of paths, the file name followed by layer names.}
+\item{col.names}{Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* layer names or, if \code{ras} is a list of paths, the file name followed by layer names.}
 
 \item{parallel}{Logical. Run function in parallel (using \code{future.apply})? Default is TRUE.}
 }
 \value{
-A sf data frame with the same number of rows as the original and new columns containing the extracted raster values.
+A sf data frame with the same number of rows as the original, and new columns containing the extracted raster values.
 }
 \description{
 Extract values from raster layers for a given set of polygons. Parallelised and using \code{velox} package for faster extraction than using \code{\link[raster:extract]{raster::extract()}}.

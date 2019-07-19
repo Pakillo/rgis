@@ -4,13 +4,13 @@
 #' Extract values from raster layers for a given set of polygons. Parallelised and using `velox` package for faster extraction than using [raster::extract()].
 #'
 #' @param sf [sf](https://r-spatial.github.io/sf/index.html) data frame containing polygon data.
-#' @param ras A Raster* object (RasterLayer, RasterStack, or RasterBrick), a _named_ list of Raster objects, or a list of paths to Raster files on disk (e.g. as obtained trough `list.files`). Thus, raster files can be stored on disk, without having to load them on memory first.
+#' @param ras A Raster* object (RasterLayer, RasterStack, or RasterBrick), a _named_ list of Raster objects, or a character vector or list of paths to Raster files on disk (e.g. as obtained through `list.files`). Thus, raster files can be stored on disk, without having to load them on memory first.
 #' @param funct The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple average, excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See [velox::VeloxRaster_extract()].
 #' @param small.algo Logical. Use 'small' algorithm to detect overlap between polygons and raster cells? See [velox::VeloxRaster_extract()]. Default is FALSE.
-#' @param col.names Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* object layer names or, if `ras` is a list of paths, the file name followed by layer names.
+#' @param col.names Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* layer names or, if `ras` is a list of paths, the file name followed by layer names.
 #' @param parallel Logical. Run function in parallel (using `future.apply`)? Default is TRUE.
 #'
-#' @return A sf data frame with the same number of rows as the original and new columns containing the extracted raster values.
+#' @return A sf data frame with the same number of rows as the original, and new columns containing the extracted raster values.
 #' @export
 #'
 #'@examples
@@ -89,18 +89,21 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
       ras.names <- as.character(match.call()$ras)
     } else {
       # if ras is a *named* list, use names of list elements
-      if (is.list(ras)) {
-        if (!is.null(names(ras))) {
-          ras.names <- names(ras)
-        } else {
-          # if ras is an *unnamed* list, assume they are paths to files,
-          # and use file basename (with extension)
+      if (is.list(ras) & !is.null(names(ras))) {
+        ras.names <- names(ras)
+      } else {
+        # if ras is an *unnamed* list, or a character vector,
+        # they must be paths to files (including / or \\):
+        # use file basename (with extension)
+        if (grepl("/", ras) || grepl("\\\\", ras)) {
           ras.names <- unlist(lapply(ras, basename))
+        } else {
+          stop("ras must be a Raster* object, a named list of Raster objects, or a list or character vector of paths to raster files on disk.")
         }
       }
-
     }
   }
+
 
 
   names(out.list) <- ras.names
