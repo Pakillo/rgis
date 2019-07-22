@@ -1,11 +1,11 @@
 
 #' Fast extraction of raster values
 #'
-#' Extract values from raster layers for a given set of polygons. Parallelised and using `velox` package for faster extraction than using [raster::extract()].
+#' Extract values from raster layers for a given set of points or polygons. Parallelised and using `velox` package for faster extraction than using [raster::extract()].
 #'
-#' @param sf [sf](https://r-spatial.github.io/sf/index.html) data frame containing polygon data.
+#' @param sf [sf](https://r-spatial.github.io/sf/index.html) data frame containing point or polygon data.
 #' @param ras A Raster* object (RasterLayer, RasterStack, or RasterBrick), a _named_ list of Raster objects, or a character vector or list of paths to Raster files on disk (e.g. as obtained through `list.files`). Thus, raster files can be stored on disk, without having to load them on memory first.
-#' @param funct The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple average, excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See [velox::VeloxRaster_extract()].
+#' @param funct The name of a function to summarise raster values within polygons. Default is 'mean.na' (simple average, excluding NA), but other functions can be used (in that case, provide function name without quotes, e.g. funct = median). See [velox::VeloxRaster_extract()]. No function is used when `sf` are points.
 #' @param small.algo Logical. Use 'small' algorithm to detect overlap between polygons and raster cells? See [velox::VeloxRaster_extract()]. Default is FALSE.
 #' @param col.names Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* layer names or, if `ras` is a list of paths, the file name followed by layer names.
 #' @param parallel Logical. Run function in parallel (using `future.apply`)? Default is TRUE.
@@ -47,10 +47,17 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
                                    funct = 'mean.na', small.algo = FALSE,
                                    col.names = NULL, parallel = TRUE) {
 
-  stopifnot('sf' %in% class(sf))
+  stopifnot(inherits(sf, "sf"))
 
-  ## Function to summarise raster values
-  if (is.null(funct)) stop("Please provide a function to summarise the raster values. Default is 'mean.na'.")
+  sf.geometry <- unique(sf::st_geometry_type(sf))
+
+  if (length(sf.geometry) > 1) stop("sf must contain a single geometry type (points or polygons).")
+
+  stopifnot(sf.geometry == "POINT" | sf.geometry == "POLYGON" | sf.geometry == "MULTIPOLYGON")
+
+
+  ## Function to summarise raster values when sf contains polygons
+  if (sf.geometry != "POINT" & is.null(funct)) stop("Please provide a function to summarise the raster values: default is 'mean.na'.")
 
   # Define mean.na function
   if (funct == 'mean.na') {
@@ -150,8 +157,17 @@ extract_velox <- function(ras = NULL, spdf = NULL,
 
 
   # extract
-  vals <- ras.vx$extract(spdf, df = TRUE, ...)  #fun = funct, small = small.algo)
-  vals <- as.data.frame(vals[, -1])
+  if (unique(sf::st_geometry_type(spdf)) == "POINT") {
+
+    vals <- as.data.frame(ras.vx$extract_points(spdf))
+
+  } else {   # POLYGON
+
+    vals <- ras.vx$extract(spdf, df = TRUE, ...)  #fun = funct, small = small.algo)
+    vals <- as.data.frame(vals[, -1])
+
+  }
+
 
 
   ## Name extracted columns ##
