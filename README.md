@@ -22,5 +22,5 @@ devtools::install_github("Pakillo/rgis")
 
   - `ungzip`: Decompress gzip files.
 
-  - `extract_velox_parallel`: Fast extraction of raster values over
-    polygons.
+  - `extract_velox_parallel`: Fast extraction of raster values for
+    points and polygons.

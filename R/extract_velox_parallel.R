@@ -1,7 +1,7 @@
 
 #' Fast extraction of raster values
 #'
-#' Extract values from raster layers for a given set of points or polygons. Parallelised and using `velox` package for faster extraction than using [raster::extract()].
+#' Extract values from raster layers for a given set of points or polygons. Using `velox` package in parallel for fast extraction.
 #'
 #' @param sf [sf](https://r-spatial.github.io/sf/index.html) data frame containing point or polygon data.
 #' @param ras A Raster* object (RasterLayer, RasterStack, or RasterBrick), a _named_ list of Raster objects, or a character vector or list of paths to Raster files on disk (e.g. as obtained through `list.files`). Thus, raster files can be stored on disk, without having to load them on memory first.
@@ -22,7 +22,8 @@
 #' # Create polygons
 #' poly1 <- rbind(c(-180,-20), c(-160,5), c(-60, 0), c(-160,-60), c(-180,-20))
 #' poly2 <- rbind(c(80,0), c(100,60), c(120,0), c(120,-55), c(80,0))
-#' polys.sf <- sf::st_as_sf(spPolygons(poly1, poly2))
+#' polys <- spPolygons(poly1, poly2)
+#' polys.sf <- sf::st_as_sf(polys)
 #' sf::st_crs(polys.sf) <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
 #'
 #' # Create rasters
@@ -30,18 +31,25 @@
 #' r2 <- raster(ncol = 36, nrow = 18, vals = (1:(18*36))*2)
 #' ras <- stack(r1, r2)
 #'
-#' rgis.output.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+#' plot(ras, 1)
+#' plot(polys, add = TRUE)
 #'
-#' rgis.output.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+#' # Extract values
+#' extract.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+#' head(extract.parallel)
+#'
+#' extract.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
 #'
 #' # Compare with raster::extract
-#' #' raster.output <- raster::extract(ras, polys, fun = mean, df = TRUE)
+#' raster.extract <- raster::extract(ras, polys, fun = mean, df = TRUE)
+#' head(raster.extract)
 #'
 #'
 #'
-#' ## Providing named list of rasters
+#' ### Providing named list of rasters
 #' ras.list <- list(r1 = r1, r2 = r2)
 #' rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+#' head(rgis.out)
 
 extract_velox_parallel <- function(sf = NULL, ras = NULL,
                                    funct = 'mean.na', small.algo = FALSE,
