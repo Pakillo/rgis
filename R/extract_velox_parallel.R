@@ -68,7 +68,7 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
   if (sf.geometry != "POINT" & is.null(funct)) stop("Please provide a function to summarise the raster values: default is 'mean.na'.")
 
   # Define mean.na function
-  if (funct == 'mean.na') {
+  if (is.character(funct) && funct == 'mean.na') {
     funct <- function(x) {mean(x, na.rm = TRUE)}
   }
 
