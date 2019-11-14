@@ -9,6 +9,7 @@
 #' @param small.algo Logical. Use 'small' algorithm to detect overlap between polygons and raster cells? See [velox::VeloxRaster_extract()]. Default is FALSE.
 #' @param col.names Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* layer names or, if `ras` is a list of paths, the file name followed by layer names.
 #' @param parallel Logical. Run function in parallel (using `future.apply`)? Default is TRUE.
+#' @param n.cores Number of cores to use when parallel = TRUE. If not specified, using all available cores (see [future::multiprocess()]).
 #'
 #' @return A sf data frame with the same number of rows as the original, and new columns containing the extracted raster values.
 #' @export
@@ -35,10 +36,10 @@
 #' plot(polys, add = TRUE)
 #'
 #' # Extract values
-#' extract.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+#' extract.parallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
 #' head(extract.parallel)
 #'
-#' extract.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+#' extract.noparallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
 #'
 #' # Compare with raster::extract
 #' raster.extract <- raster::extract(ras, polys, fun = mean, df = TRUE)
@@ -48,12 +49,13 @@
 #'
 #' ### Providing named list of rasters
 #' ras.list <- list(r1 = r1, r2 = r2)
-#' rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+#' rgis.out <- extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
 #' head(rgis.out)
 
 extract_velox_parallel <- function(sf = NULL, ras = NULL,
                                    funct = 'mean.na', small.algo = FALSE,
-                                   col.names = NULL, parallel = TRUE) {
+                                   col.names = NULL,
+                                   parallel = TRUE, n.cores = NULL) {
 
   stopifnot(inherits(sf, "sf"))
 
@@ -77,7 +79,15 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
   if (isTRUE(parallel)) {
     oplan <- future::plan()
     on.exit(future::plan(oplan), add = TRUE)
-    future::plan(future::multiprocess)
+
+    if (!is.null(n.cores)) {
+      if (n.cores > future::availableCores()) {
+        stop("\n 'n.cores' can't be higher than the number of available cores: ", future::availableCores(), ".\n")
+      }
+      future::plan(future::multiprocess, workers = n.cores)
+    } else {
+      future::plan(future::multiprocess)
+    }
   }
 
   # First argument to future_lapply must be a list
