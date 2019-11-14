@@ -193,6 +193,8 @@ extract_velox <- function(ras = NULL, spdf = NULL,
   if (is.null(varnames)) {
     # velox does not seem to provide layer names, so using raster instead
     names(vals) <- names(raster::stack(ras, quick = TRUE))
+  } else {
+    names(vals) <- varnames
   }
 
 
