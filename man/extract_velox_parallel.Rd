@@ -5,7 +5,8 @@
 \title{Fast extraction of raster values}
 \usage{
 extract_velox_parallel(sf = NULL, ras = NULL, funct = "mean.na",
-  small.algo = FALSE, col.names = NULL, parallel = TRUE)
+  small.algo = FALSE, col.names = NULL, parallel = TRUE,
+  n.cores = NULL)
 }
 \arguments{
 \item{sf}{\href{https://r-spatial.github.io/sf/index.html}{sf} data frame containing point or polygon data.}
@@ -19,6 +20,8 @@ extract_velox_parallel(sf = NULL, ras = NULL, funct = "mean.na",
 \item{col.names}{Optional. Character vector with names for extracted columns in the output dataframe. If not provided, the function will use the Raster* layer names or, if \code{ras} is a list of paths, the file name followed by layer names.}
 
 \item{parallel}{Logical. Run function in parallel (using \code{future.apply})? Default is TRUE.}
+
+\item{n.cores}{Number of cores to use when parallel = TRUE. If not specified, using all available cores (see \code{\link[future:multiprocess]{future::multiprocess()}}).}
 }
 \value{
 A sf data frame with the same number of rows as the original, and new columns containing the extracted raster values.
@@ -48,10 +51,10 @@ plot(ras, 1)
 plot(polys, add = TRUE)
 
 # Extract values
-extract.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+extract.parallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
 head(extract.parallel)
 
-extract.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+extract.noparallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
 
 # Compare with raster::extract
 raster.extract <- raster::extract(ras, polys, fun = mean, df = TRUE)
@@ -61,6 +64,6 @@ head(raster.extract)
 
 ### Providing named list of rasters
 ras.list <- list(r1 = r1, r2 = r2)
-rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+rgis.out <- extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
 head(rgis.out)
 }
