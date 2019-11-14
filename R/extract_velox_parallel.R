@@ -108,7 +108,7 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
 
   ## Name extracted columns ##
 
-  if (is.null(col.names)) {
+#  if (is.null(col.names)) {
     # if ras = Raster* object, use the object name
     if (inherits(ras, c("RasterLayer", "RasterStack", "RasterBrick"))) {
       ras.names <- as.character(match.call()$ras)
@@ -127,7 +127,7 @@ extract_velox_parallel <- function(sf = NULL, ras = NULL,
         }
       }
     }
-  }
+#  }
 
 
 
