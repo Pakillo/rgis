@@ -1,7 +1,7 @@
 Package: rgis
 Type: Package
 Title: Some utilities to perform GIS operations in R
-Version: 0.2.11
+Version: 0.3.0
 Authors@R: 
     person(given = "Francisco",
            family = "Rodriguez-Sanchez",
@@ -15,7 +15,7 @@ License: GPL-3
 LazyData: TRUE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Imports:
     R.utils,
     velox,
@@ -23,7 +23,8 @@ Imports:
     future.apply,
     dplyr,
     raster,
-    sf
+    sf,
+    fasterize
 Suggests: 
     testthat (>= 2.1.0),
     covr

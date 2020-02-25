@@ -4,9 +4,15 @@
 \alias{extract_velox_parallel}
 \title{Fast extraction of raster values}
 \usage{
-extract_velox_parallel(sf = NULL, ras = NULL, funct = "mean.na",
-  small.algo = FALSE, col.names = NULL, parallel = TRUE,
-  n.cores = NULL)
+extract_velox_parallel(
+  sf = NULL,
+  ras = NULL,
+  funct = "mean.na",
+  small.algo = FALSE,
+  col.names = NULL,
+  parallel = TRUE,
+  n.cores = NULL
+)
 }
 \arguments{
 \item{sf}{\href{https://r-spatial.github.io/sf/index.html}{sf} data frame containing point or polygon data.}

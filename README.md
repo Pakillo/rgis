@@ -24,3 +24,6 @@ devtools::install_github("Pakillo/rgis")
 
   - `extract_velox_parallel`: Fast extraction of raster values for
     points and polygons.
+
+  - `fast_mask`: Fast masking of raster values based on another raster
+    or polygon layer.
