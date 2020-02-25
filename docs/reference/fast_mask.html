@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast mask of raster values — fast_mask • rgis</title>
+<title>Fast masking of raster values — fast_mask • rgis</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Fast mask of raster values — fast_mask" />
-<meta property="og:description" content="This is a fast implementation of raster::mask() (actually using raster::overlay() inside)." />
+<meta property="og:title" content="Fast masking of raster values — fast_mask" />
+<meta property="og:description" content="This is a fast implementation of raster::mask() (actually using raster::overlay() inside). It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might be slower than raster::mask() sometimes when the mask is a Raster. Largest speed gains occur for polygon masks." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -105,13 +105,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fast mask of raster values</h1>
+    <h1>Fast masking of raster values</h1>
     <small class="dont-index">Source: <a href='https://github.com/Pakillo/rgis/blob/master/R/fast_mask.R'><code>R/fast_mask.R</code></a></small>
     <div class="hidden name"><code>fast_mask.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This is a fast implementation of <code><a href='https://rdrr.io/pkg/raster/man/mask.html'>raster::mask()</a></code> (actually using <code><a href='https://rdrr.io/pkg/raster/man/overlay.html'>raster::overlay()</a></code> inside).</p>
+    <p>This is a fast implementation of <code><a href='https://rdrr.io/pkg/raster/man/mask.html'>raster::mask()</a></code> (actually using <code><a href='https://rdrr.io/pkg/raster/man/overlay.html'>raster::overlay()</a></code> inside). It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might be slower than <code><a href='https://rdrr.io/pkg/raster/man/mask.html'>raster::mask()</a></code> sometimes when the mask is a Raster. Largest speed gains occur for polygon masks.</p>
     </div>
 
     <pre class="usage"><span class='fu'>fast_mask</span>(<span class='kw'>ras</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mask</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>inverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>updatevalue</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
@@ -155,8 +155,8 @@
 <span class='co'># Using raster as mask</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/mask.html'>mask</a></span>(<span class='no'>ras</span>, <span class='no'>msk</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;    0.00    0.02    0.01 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_mask</span>(<span class='no'>ras</span>, <span class='no'>msk</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;    0.00    0.01    0.02 </div><div class='input'>
+#&gt;    0.00    0.01    0.02 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_mask</span>(<span class='no'>ras</span>, <span class='no'>msk</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;    0.01    0.02    0.03 </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span>(<span class='no'>ras</span>)</div><div class='img'><img src='fast_mask-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span>(<span class='no'>msk</span>)</div><div class='img'><img src='fast_mask-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/raster/man/plot.html'>plot</a></span>(<span class='no'>ras.masked</span>)</div><div class='img'><img src='fast_mask-3.png' alt='' width='700' height='433' /></div><div class='input'>
 
 <span class='co'># Using polygon layer as mask</span>
@@ -164,9 +164,9 @@
 <span class='no'>msk.sp</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='no'>msk</span>, <span class='st'>'SpatialPolygonsDataFrame'</span>)
 <span class='no'>msk.sf</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>sf</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sf/man/st_as_sf.html'>st_as_sf</a></span>(<span class='no'>msk.sp</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/mask.html'>mask</a></span>(<span class='no'>ras</span>, <span class='no'>msk.sp</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   14.68    0.03   15.09 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/mask.html'>mask</a></span>(<span class='no'>ras</span>, <span class='no'>msk.sf</span>))</div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;   16.65    0.03   17.04 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_mask</span>(<span class='no'>ras</span>, <span class='no'>msk.sf</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt;    user  system elapsed 
-#&gt;    1.15    0.00    1.19 </div><div class='input'>
+#&gt;   14.52    0.03   15.09 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>raster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/raster/man/mask.html'>mask</a></span>(<span class='no'>ras</span>, <span class='no'>msk.sf</span>))</div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;   18.28    0.22   19.32 </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>(<span class='no'>ras.masked</span> <span class='kw'>&lt;-</span> <span class='fu'>fast_mask</span>(<span class='no'>ras</span>, <span class='no'>msk.sf</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt;    user  system elapsed 
+#&gt;    1.23    0.00    1.73 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
