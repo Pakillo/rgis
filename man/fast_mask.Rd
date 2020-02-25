@@ -2,7 +2,7 @@
 % Please edit documentation in R/fast_mask.R
 \name{fast_mask}
 \alias{fast_mask}
-\title{Fast mask of raster values}
+\title{Fast masking of raster values}
 \usage{
 fast_mask(ras = NULL, mask = NULL, inverse = FALSE, updatevalue = NA)
 }
@@ -19,7 +19,7 @@ fast_mask(ras = NULL, mask = NULL, inverse = FALSE, updatevalue = NA)
 Raster* object
 }
 \description{
-This is a fast implementation of \code{\link[raster:mask]{raster::mask()}} (actually using \code{\link[raster:overlay]{raster::overlay()}} inside).
+This is a fast implementation of \code{\link[raster:mask]{raster::mask()}} (actually using \code{\link[raster:overlay]{raster::overlay()}} inside). It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might be slower than \code{\link[raster:mask]{raster::mask()}} sometimes when the mask is a Raster. Largest speed gains occur for polygon masks.
 }
 \examples{
 library(raster)
