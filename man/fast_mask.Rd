@@ -19,7 +19,7 @@ fast_mask(ras = NULL, mask = NULL, inverse = FALSE, updatevalue = NA)
 Raster* object
 }
 \description{
-This is a fast implementation of \code{\link[raster:mask]{raster::mask()}} (actually using \code{\link[raster:overlay]{raster::overlay()}} inside). It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might be slower than \code{\link[raster:mask]{raster::mask()}} sometimes when the mask is a Raster. Largest speed gains occur for polygon masks.
+This is a fast implementation of \code{\link[raster:mask]{raster::mask()}}. It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might sometimes be slower than \code{\link[raster:mask]{raster::mask()}} when the mask is a Raster. Largest speed gains occur for polygon masks.
 }
 \examples{
 library(raster)

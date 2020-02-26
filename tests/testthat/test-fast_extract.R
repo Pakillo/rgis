@@ -1,4 +1,4 @@
-context("Test extract_velox_parallel")
+context("Test fast_extract")
 
 library(raster)
 library(sf)
@@ -20,9 +20,9 @@ ras <- stack(r1, r2)
 raster.output <- raster::extract(ras, polys, fun = mean, df = TRUE)
 raster.output <- raster.output[, -1]
 
-rgis.output.parallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+rgis.output.parallel <- rgis::fast_extract(sf = polys.sf, ras = ras, parallel = TRUE)
 
-rgis.output.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+rgis.output.noparallel <- rgis::fast_extract(sf = polys.sf, ras = ras, parallel = FALSE)
 
 
 
@@ -31,7 +31,7 @@ rgis.output.noparallel <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras,
 
 ## Providing named list of rasters
 ras.list <- list(r1 = r1, r2 = r2)
-rgis.out <- rgis::extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+rgis.out <- rgis::fast_extract(sf = polys.sf, ras = ras.list, parallel = FALSE)
 
 
 
@@ -52,7 +52,7 @@ spoint <- sf::st_as_sf(coord, coords = c("x", "y"))
 st_crs(spoint) <- projection(rp1)
 spoint.sp <- as(spoint, "Spatial")
 
-extract.points <- extract_velox_parallel(spoint, list(rp1 = rp1, rp2 = rp2))
+extract.points <- fast_extract(spoint, list(rp1 = rp1, rp2 = rp2))
 extract.points.raster <- raster::extract(stack(rp1, rp2), spoint.sp, df = TRUE)[, -1]
 
 
@@ -72,7 +72,7 @@ test_that("results from parallel and sequential runs match", {
 
 
 test_that("results from exact_velox_parallel match those from raster::extract", {
-  # compared to raster::extract, rgis::extract_velox_parallel appends the raster name
+  # compared to raster::extract, rgis::fast_extract appends the raster name
   # to layer names. So, renaming the layers here to make them equal to raster::extract output
   # Here I just want to check values of extraction are consistent
   rgis.output.renamed <- sf::st_drop_geometry(rgis.output.noparallel)

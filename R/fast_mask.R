@@ -1,6 +1,6 @@
 #' Fast masking of raster values
 #'
-#' This is a fast implementation of [raster::mask()] (actually using [raster::overlay()] inside). It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might be slower than [raster::mask()] sometimes when the mask is a Raster. Largest speed gains occur for polygon masks.
+#' This is a fast implementation of [raster::mask()]. It masks values in a Raster object according to values in another Raster or polygon layer. Note that this function might sometimes be slower than [raster::mask()] when the mask is a Raster. Largest speed gains occur for polygon masks.
 #'
 #' @param ras Raster* object.
 #' @param mask Raster* object or POLYGON/MULTIPOLYGON [sf::sf()] object.

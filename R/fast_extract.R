@@ -36,10 +36,10 @@
 #' plot(polys, add = TRUE)
 #'
 #' # Extract values
-#' extract.parallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = TRUE)
+#' extract.parallel <- fast_extract(sf = polys.sf, ras = ras, parallel = TRUE)
 #' head(extract.parallel)
 #'
-#' extract.noparallel <- extract_velox_parallel(sf = polys.sf, ras = ras, parallel = FALSE)
+#' extract.noparallel <- fast_extract(sf = polys.sf, ras = ras, parallel = FALSE)
 #'
 #' # Compare with raster::extract
 #' raster.extract <- raster::extract(ras, polys, fun = mean, df = TRUE)
@@ -49,10 +49,10 @@
 #'
 #' ### Providing named list of rasters
 #' ras.list <- list(r1 = r1, r2 = r2)
-#' rgis.out <- extract_velox_parallel(sf = polys.sf, ras = ras.list, parallel = FALSE)
+#' rgis.out <- fast_extract(sf = polys.sf, ras = ras.list, parallel = FALSE)
 #' head(rgis.out)
 
-extract_velox_parallel <- function(sf = NULL, ras = NULL,
+fast_extract <- function(sf = NULL, ras = NULL,
                                    funct = 'mean.na', small.algo = FALSE,
                                    col.names = NULL,
                                    parallel = TRUE, n.cores = NULL) {
