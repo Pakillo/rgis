@@ -77,6 +77,7 @@ test_that("results from exact_velox_parallel match those from raster::extract", 
   # Here I just want to check values of extraction are consistent
   rgis.output.renamed <- sf::st_drop_geometry(rgis.output.noparallel)
   names(rgis.output.renamed) <- c("layer.1", "layer.2")
+  row.names(rgis.output.renamed) <- NULL
   expect_equal(raster.output, rgis.output.renamed)
 
   ## Now for point sf:
