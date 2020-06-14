@@ -14,9 +14,7 @@ coverage](https://codecov.io/gh/Pakillo/rgis/branch/master/graph/badge.svg)](htt
 
 <https://pakillo.github.io/rgis>
 
-<br>
-
-<img src="logo.jpg" width="100%" />
+<img src='logo.jpg' height="200" width="100%"/>
 
 ## Installation
 
