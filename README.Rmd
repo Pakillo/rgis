@@ -13,12 +13,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Rgis: utilities to perform GIS operations in R
+# Rgis: streamlining GIS operations in R
 
 <!-- badges: start -->
 [![Travis-CI Build Status](https://travis-ci.org/Pakillo/rgis.svg?branch=master)](https://travis-ci.org/Pakillo/rgis)
 [![Codecov test coverage](https://codecov.io/gh/Pakillo/rgis/branch/master/graph/badge.svg)](https://codecov.io/gh/Pakillo/rgis?branch=master)
+[![HitCount](http://hits.dwyl.com/Pakillo/rgis.svg)](http://hits.dwyl.com/Pakillo/rgis)
 <!-- badges: end -->
+
+https://pakillo.github.io/rgis
+
+<br>
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics("logo.jpg")
+
+```
 
 
 ## Installation

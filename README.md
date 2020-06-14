@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Rgis: utilities to perform GIS operations in R
+# Rgis: streamlining GIS operations in R
 
 <!-- badges: start -->
 
@@ -9,7 +9,14 @@
 Status](https://travis-ci.org/Pakillo/rgis.svg?branch=master)](https://travis-ci.org/Pakillo/rgis)
 [![Codecov test
 coverage](https://codecov.io/gh/Pakillo/rgis/branch/master/graph/badge.svg)](https://codecov.io/gh/Pakillo/rgis?branch=master)
+[![HitCount](http://hits.dwyl.com/Pakillo/rgis.svg)](http://hits.dwyl.com/Pakillo/rgis)
 <!-- badges: end -->
+
+<https://pakillo.github.io/rgis>
+
+<br>
+
+<img src="logo.jpg" width="100%" />
 
 ## Installation
 
