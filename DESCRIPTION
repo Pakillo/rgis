@@ -18,7 +18,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Imports:
     R.utils,
-    velox (== 0.2.0),
+    velox,
     future,
     future.apply,
     dplyr,
@@ -28,3 +28,4 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0),
     covr
+Remotes: hunzikp/velox@ff7bc3c
