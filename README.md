@@ -18,23 +18,16 @@ coverage](https://codecov.io/gh/Pakillo/rgis/branch/master/graph/badge.svg)](htt
 
 ## Installation
 
-This package depends on package
+``` r
+remotes::install_github("Pakillo/rgis")
+```
+
+Note: this package depends on package
 [`velox`](https://github.com/hunzikp/velox), which has been removed from
 CRAN as of 2020-03-17 (see
 [here](https://github.com/hunzikp/velox/issues/43) for more info). While
-it (hopefully) comes back to CRAN, you will need to install `velox`
-**before** attempting to install `rgis`, like this (thanks @lbusett for
-the tip):
-
-``` r
-devtools::install_version("velox", version = "0.2.0")
-```
-
-Then you can install `rgis`:
-
-``` r
-devtools::install_github("Pakillo/rgis")
-```
+`velox` (hopefully) comes back to CRAN, installing `rgis` will install
+the latest `velox` version available on GitHub (0.2.0.9002).
 
 ## Current functions:
 
